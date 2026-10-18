@@ -142,6 +142,7 @@ window.PROFIL = {
   projekte: [
     {
       titel: "Diese Webseite",
+      grafik: "webseite", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "",
       // Text oder Liste von kurzen Absätzen.
       text: [
@@ -172,6 +173,7 @@ window.PROFIL = {
     },
     {
       titel: "LOKIWO (lokaler KI-Workflow)",
+      grafik: "lokiwo", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "In Entwicklung",
       text:
         "Die Idee: Jemand beschreibt in ganz normaler Sprache, wie ein Prozess in der " +
@@ -191,6 +193,7 @@ window.PROFIL = {
     },
     {
       titel: "Historisches Tagebuch Attendorn",
+      grafik: "kalender", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "",
       text:
         "Auf der Webseite der Stadt gab es schon lange ein historisches Tagebuch: Was ist " +
@@ -202,6 +205,7 @@ window.PROFIL = {
     },
     {
       titel: "Rahmenplan Klimawandel",
+      grafik: "tabelle", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "",
       text:
         "Den Rahmenplan Klimawandel gab es bisher nur als PDF. Vollständig, aber nicht " +
@@ -215,6 +219,7 @@ window.PROFIL = {
     },
     {
       titel: "KI-Leitlinien der Hansestadt Attendorn",
+      grafik: "leitlinien", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "",
       text:
         "Für die Stadt haben wir KI-Leitlinien erarbeitet. Eigentlich sollten die als PDF " +
@@ -225,6 +230,7 @@ window.PROFIL = {
     },
     {
       titel: "ARNI64: Adventure-Engine für den C64",
+      grafik: "prompt", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "Hobbyprojekt",
       text:
         "Textadventures haben mich auf dem C64 schon immer begeistert, also wollte ich " +
@@ -244,6 +250,7 @@ window.PROFIL = {
     },
     {
       titel: "YouTube-Kanal N3rdroom",
+      grafik: "video", // Experiment: kleine CSS-Zeichnung neben dem Titel
       status: "",
       text:
         "Auf meinem Kanal geht es um Retrocomputer und Programmierung. Ich zeige dort " +

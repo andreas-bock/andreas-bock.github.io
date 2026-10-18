@@ -24,6 +24,8 @@
   --accent-soft: #dde9e2;
   --on-accent: #ffffff;
   --stempel: #5a3e91;         /* Stempelkissen */
+  --bildschirm: #232724;      /* Monitor in den Projekt-Grafiken, in beiden Modi dunkel */
+  --bildschirm-text: #e4e5df;
   --focus: #b8420d;
 
   /* Epochen-Hintergründe */
@@ -49,8 +51,11 @@
   --rand: 14rem;              /* Breite der Randspalte */
 }
 
+/* Dunkles Design: folgt der Systemeinstellung, außer jemand hat oben im Menü
+   umgeschaltet (data-theme am <html>). Die Werte stehen deshalb zweimal. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --text: #e4e5df;
     --muted: #a7aaa2;
     --line: #3a3d38;
@@ -61,6 +66,8 @@
     --accent-soft: #1b2e27;
     --on-accent: #08201a;
     --stempel: #b7a3e8;
+    --bildschirm: #0d0e0d;
+    --bildschirm-text: #e4e5df;
     --focus: #f59a5b;
 
     --akte-bg: #1a1b19;
@@ -77,6 +84,36 @@
     --ki-ink: #a49be6;
   }
 }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text: #e4e5df;
+  --muted: #a7aaa2;
+  --line: #3a3d38;
+  --line-strong: #6a6e66;
+  --surface: #222421;
+  --accent: #72c4a7;
+  --accent-strong: #a0dcc6;
+  --accent-soft: #1b2e27;
+  --on-accent: #08201a;
+  --stempel: #b7a3e8;
+  --bildschirm: #0d0e0d;
+  --bildschirm-text: #e4e5df;
+  --focus: #f59a5b;
+
+  --akte-bg: #1a1b19;
+  --akte-ink: #9c9b8c;
+  --akte-linie: rgb(220 225 215 / 0.05);
+  --akte-loch: rgb(0 0 0 / 0.45);
+  --pdf-bg: #17181b;
+  --pdf-ink: #8b939e;
+  --pdf-blatt: rgb(255 255 255 / 0.03);
+  --web-bg: #111920;
+  --web-ink: #7e9db6;
+  --web-raster: rgb(140 180 210 / 0.06);
+  --ki-bg: #16141f;
+  --ki-ink: #a49be6;
+}
+:root[data-theme="light"] { color-scheme: light; }
 
 /* ---------- Grundlagen ---------- */
 
@@ -373,7 +410,46 @@ a.external::after {
 .nav__toggle[aria-expanded="true"] .nav__toggle-bar::after { transform: translateY(-6px) rotate(-45deg); }
 
 @media (min-width: 861px) {
-  .nav__menu { display: flex; gap: 1.75rem; }
+  .nav__menu { display: flex; align-items: center; gap: 1.75rem; }
+}
+
+/* Umschalter hell/dunkel: am Desktop nur das Symbol oben rechts, im Handy-Menü mit Text */
+.nav__theme { display: none; }
+.js .nav__theme { display: block; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.6rem;
+  border: 1.5px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-family: var(--din);
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle__icon {           /* halb gefüllter Kreis, das übliche Zeichen für Kontrast */
+  flex: none;
+  width: 1.1rem; height: 1.1rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  transition: transform 0.25s;
+}
+.theme-toggle[aria-pressed="true"] .theme-toggle__icon { transform: rotate(180deg); }
+.theme-toggle[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+@media (min-width: 861px) {
+  .theme-toggle { justify-content: center; padding: 0; }
+  .theme-toggle__text {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 /* Auf schmalen Bildschirmen klappt das Menü unter der Kopfzeile auf. Ohne JavaScript
@@ -392,6 +468,12 @@ a.external::after {
   .js .nav__menu.is-open { display: block; }
   .js .nav__menu a { display: block; padding: 0.8rem 0.25rem; border-bottom: 1px solid var(--line); font-size: 1.1rem; }
   .js .nav__menu li:last-child a { border-bottom: 0; }
+  .js .theme-toggle {
+    width: 100%;
+    margin: 0.6rem 0 0.25rem;
+    padding: 0 0.75rem;
+    font-size: 1.1rem;
+  }
 }
 
 /* ---------- Hero ---------- */
@@ -800,3 +882,332 @@ a.external::after {
 .legal address { font-style: normal; margin-bottom: 1em; }
 .legal__back { display: inline-block; margin-bottom: 2rem; font-family: var(--din); font-size: 1.05rem; }
 .legal__stand { margin-top: 2.5rem; color: var(--muted); font-family: var(--din); font-size: 0.9rem; }
+
+/* ==========================================================================
+   Experiment: Grafiken aus reinem CSS (keine Bilddateien, alles über Tokens)
+   ========================================================================== */
+
+/* ---------- Über mich: Werdegang als Ordnerregal ---------- */
+
+.registratur {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.35rem;
+  height: 10.5rem;
+  margin-bottom: 2.25rem;
+  padding: 0 0.5rem;
+  border-bottom: 4px solid var(--line-strong); /* Regalbrett */
+}
+.ordner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  width: clamp(2.6rem, 9vw, 3.25rem);
+  padding-top: 0.45rem;
+  background: color-mix(in srgb, var(--line-strong) 28%, var(--surface));
+  border: 1.5px solid var(--line-strong);
+  border-bottom: 0;
+  font-family: var(--din);
+  line-height: 1.1;
+}
+.ordner:nth-child(1) { height: 86%; }
+.ordner:nth-child(2) { height: 94%; }
+.ordner:nth-child(3) { height: 89%; }
+.ordner:nth-child(4) { height: 100%; }
+.ordner:nth-child(5) { height: 95%; }
+.ordner:nth-child(6) { height: 91%; }
+.ordner b {                    /* Jahreszahl oben auf dem Rücken */
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.ordner em {                   /* Rückenschild */
+  margin-top: 0.4rem;
+  padding: 0.35rem 0.1rem;
+  height: 5.5rem;
+  width: 70%;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  font-size: 0.78rem;
+  font-style: normal;
+  text-align: center;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--text);
+}
+.ordner::after {               /* Griffloch */
+  content: "";
+  position: absolute;
+  bottom: 0.7rem;
+  width: 1rem; height: 1rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--akte-bg);
+}
+/* Der aktuelle Ordner: Grünstift, lehnt am Ende des Regals */
+.ordner--aktuell {
+  background: color-mix(in srgb, var(--accent) 55%, var(--surface));
+  border-color: var(--accent);
+  transform: rotate(7deg);
+  transform-origin: bottom right;
+}
+.ordner--aktuell b { color: var(--on-accent); }
+.ordner--aktuell em { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+/* ---------- Projekte: kleine Zeichnung neben dem Titel ---------- */
+
+.grafik {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 4.5rem;
+  height: 3.25rem;
+  color: var(--line-strong);
+}
+.grafik i { display: none; position: relative; }
+
+/* Diese Webseite: Browserfenster mit den vier Epochen */
+.grafik--webseite {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.45rem repeat(4, 1fr);
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 2px;
+  padding: 0 4px 4px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+.grafik--webseite::before { content: ""; border-bottom: 1.5px solid currentColor; margin: 0 -4px; }
+.grafik--webseite i { display: block; }
+.grafik--webseite i:nth-child(1) { background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, var(--akte-ink) 45%, transparent) 2px 3px); }
+.grafik--webseite i:nth-child(2) { background: color-mix(in srgb, var(--pdf-ink) 35%, transparent); }
+.grafik--webseite i:nth-child(3) { border: 1.5px solid color-mix(in srgb, var(--web-ink) 70%, transparent); border-radius: 2px; }
+.grafik--webseite i:nth-child(4) { background: var(--accent); border-radius: 4px; }
+
+/* LOKIWO: aus gesprochener Sprache wird eine Markdown-Datei */
+.grafik--lokiwo { gap: 0.3rem; }
+.grafik--lokiwo i:nth-child(1) {            /* Sprechblase */
+  display: block;
+  width: 1.55rem; height: 1.1rem;
+  border: 1.5px solid currentColor;
+  border-radius: 0.5rem;
+}
+.grafik--lokiwo i:nth-child(1)::after {
+  content: "";
+  position: absolute;
+  left: 0.2rem; bottom: -0.3rem;
+  width: 0.4rem; height: 0.4rem;
+  border-left: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  background: var(--surface);
+  transform: skewY(-35deg);
+}
+.grafik--lokiwo i:nth-child(2),
+.grafik--tabelle i:nth-child(2) {           /* Pfeil */
+  display: block;
+  width: 0.65rem; height: 1.5px;
+  background: var(--accent);
+}
+.grafik--lokiwo i:nth-child(2)::after,
+.grafik--tabelle i:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  right: 0; top: -3px;
+  width: 6px; height: 6px;
+  border-top: 1.5px solid var(--accent);
+  border-right: 1.5px solid var(--accent);
+  transform: rotate(45deg);
+}
+.grafik--lokiwo i:nth-child(3) {            /* Markdown-Seite */
+  display: block;
+  width: 1.45rem; height: 1.9rem;
+  border: 1.5px solid currentColor;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 4px, currentColor 4px 5.5px) no-repeat 0.2rem 0.8rem / calc(100% - 0.4rem) 0.9rem;
+}
+.grafik--lokiwo i:nth-child(3)::before {
+  content: "#";
+  position: absolute;
+  left: 0.2rem; top: 0;
+  font-family: var(--din);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+/* Historisches Tagebuch: Abreißkalender, ein Tag angestrichen */
+/* Raster: 5 Spalten x 4 Zeilen, Zelle 0.5rem. Der Kringel sitzt im selben Raster
+   (Spalte 4, Zeile 3), damit er genau einen Punkt umschließt. */
+.grafik--kalender {
+  --zelle: 0.5rem;
+  --kal-x: calc((4.5rem - 2.9rem) / 2 + 2px + 0.15rem);  /* linker Rand des Rasters */
+  --kal-y: calc((3.25rem - 2.9rem) / 2 + 0.55rem + 0.1rem); /* oberer Rand des Rasters */
+}
+.grafik--kalender i:nth-child(1) {
+  display: block;
+  width: 2.9rem; height: 2.9rem;
+  border: 2px solid currentColor;
+  border-top: 0.55rem solid var(--accent);
+  background: radial-gradient(circle, currentColor 1.2px, transparent 1.5px)
+    0.15rem 0.1rem / var(--zelle) var(--zelle);
+}
+.grafik--kalender i:nth-child(1)::before,
+.grafik--kalender i:nth-child(1)::after {   /* Ringe */
+  content: "";
+  position: absolute;
+  top: -0.85rem;
+  width: 0.25rem; height: 0.55rem;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  background: var(--surface);
+}
+.grafik--kalender i:nth-child(1)::before { left: 0.55rem; }
+.grafik--kalender i:nth-child(1)::after { right: 0.55rem; }
+.grafik--kalender i:nth-child(2) {          /* Kringel um genau einen Tag */
+  display: block;
+  position: absolute;
+  left: calc(var(--kal-x) + 3.5 * var(--zelle) - 0.4rem);
+  top: calc(var(--kal-y) + 2.5 * var(--zelle) - 0.32rem);
+  width: 0.8rem; height: 0.64rem;
+  border: 1.5px solid var(--stempel);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+/* Rahmenplan Klimawandel: aus der Tabelle wird eine Webseite */
+.grafik--tabelle { gap: 0.3rem; }
+.grafik--tabelle i:nth-child(1) {
+  display: block;
+  width: 1.6rem; height: 1.6rem;
+  border: 1.5px solid currentColor;
+  background:
+    linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 100% 0.35rem,
+    repeating-linear-gradient(90deg, transparent 0 calc(0.5rem - 1px), currentColor calc(0.5rem - 1px) 0.5rem),
+    repeating-linear-gradient(180deg, transparent 0 calc(0.4rem - 1px), currentColor calc(0.4rem - 1px) 0.4rem);
+}
+.grafik--tabelle i:nth-child(3) {
+  display: block;
+  width: 1.6rem; height: 1.6rem;
+  border: 1.5px solid currentColor;
+  border-top-width: 0.3rem;
+  border-radius: 3px;
+  background:
+    linear-gradient(var(--accent), var(--accent)) no-repeat 0.15rem 0.2rem / 0.55rem 0.55rem,
+    linear-gradient(currentColor, currentColor) no-repeat 0.8rem 0.25rem / 0.55rem 1.5px,
+    linear-gradient(currentColor, currentColor) no-repeat 0.8rem 0.55rem / 0.4rem 1.5px,
+    linear-gradient(currentColor, currentColor) no-repeat 0.15rem 0.95rem / calc(100% - 0.3rem) 1.5px;
+}
+
+/* KI-Leitlinien: Dokument mit § und abgehakten Punkten */
+.grafik--leitlinien {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  width: 2.6rem;
+  margin: 0 0.95rem;
+  padding: 0 0 0.35rem 0.35rem;
+  border: 1.5px solid currentColor;
+}
+.grafik--leitlinien::before {
+  content: "§";
+  position: absolute;
+  top: 0.1rem; right: 0.3rem;
+  font-family: var(--din);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent);
+}
+.grafik--leitlinien i:nth-child(-n+3) {
+  display: block;
+  width: 1.75rem; height: 0.35rem;
+  margin-top: 0.28rem;
+  background:
+    linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 0.35rem 100%,
+    linear-gradient(currentColor, currentColor) no-repeat 0.55rem 50% / calc(100% - 0.55rem) 1.5px;
+}
+
+/* ARNI64: Eingabezeile eines Textadventures mit blinkendem Cursor */
+.grafik--prompt {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.22rem;
+  padding: 0 0.4rem 0.3rem;
+  background: var(--bildschirm);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 4px;
+  color: var(--bildschirm-text);
+}
+.grafik--prompt::before {               /* Bild der Szene, oben links */
+  content: "";
+  position: absolute;
+  top: 0.35rem; left: 0.4rem;
+  width: 1.15rem; height: 0.8rem;
+  border-radius: 2px;
+  background:
+    linear-gradient(160deg, transparent 55%, color-mix(in srgb, var(--accent) 80%, var(--bildschirm-text)) 56%),
+    color-mix(in srgb, var(--stempel) 70%, var(--bildschirm));
+}
+.grafik--prompt::after {                /* zwei Zeilen neben dem Bild */
+  content: "";
+  position: absolute;
+  top: 0.48rem; left: 1.8rem;
+  width: 2.1rem; height: 0.45rem;
+  background:
+    linear-gradient(color-mix(in srgb, var(--bildschirm-text) 55%, transparent), color-mix(in srgb, var(--bildschirm-text) 55%, transparent)) no-repeat 0 0 / 100% 1.5px,
+    linear-gradient(color-mix(in srgb, var(--bildschirm-text) 55%, transparent), color-mix(in srgb, var(--bildschirm-text) 55%, transparent)) no-repeat 0 100% / 70% 1.5px;
+}
+.grafik--prompt i:nth-child(1),
+.grafik--prompt i:nth-child(2) {
+  display: block;
+  height: 1.5px;
+  background: color-mix(in srgb, currentColor 55%, transparent);
+}
+.grafik--prompt i:nth-child(1) { width: 2.8rem; }
+.grafik--prompt i:nth-child(2) { width: 1.9rem; }
+.grafik--prompt i:nth-child(3) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-family: var(--din);
+  font-size: 0.8rem;
+  font-style: normal;
+  line-height: 1;
+}
+.grafik--prompt i:nth-child(3)::before { content: ">"; }
+.grafik--prompt i:nth-child(3)::after {
+  content: "";
+  width: 0.4rem; height: 0.7rem;
+  background: var(--accent);
+  animation: cursor 1.1s steps(1) infinite;
+}
+@keyframes cursor { 50% { opacity: 0; } }
+
+/* YouTube-Kanal: Videorahmen mit Abspielknopf und Fortschritt */
+.grafik--video {
+  border: 1.5px solid currentColor;
+  border-radius: 5px;
+}
+.grafik--video i:nth-child(1) {
+  display: block;
+  width: 0; height: 0;
+  margin-bottom: 0.3rem;
+  border-left: 0.85rem solid var(--accent);
+  border-top: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid transparent;
+}
+.grafik--video i:nth-child(2) {
+  display: block;
+  position: absolute;
+  left: 0.35rem; right: 0.35rem; bottom: 0.35rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0 40%, color-mix(in srgb, currentColor 50%, transparent) 40%);
+}

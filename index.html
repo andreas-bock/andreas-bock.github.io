@@ -212,6 +212,13 @@
         <li><a href="#kenntnisse">Kenntnisse</a></li>
         <li><a href="#projekte">Projekte</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
+        <!-- Umschalter hell/dunkel, braucht JavaScript und wird sonst ausgeblendet -->
+        <li class="nav__theme">
+          <button class="theme-toggle" type="button" aria-pressed="false">
+            <span class="theme-toggle__icon" aria-hidden="true"></span>
+            <span class="theme-toggle__text">Dunkles Design</span>
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -256,6 +263,15 @@
           <h2 class="section__title" id="ueber-mich-titel">Über mich</h2>
         </header>
         <div class="section__body about">
+          <!-- Experiment: Werdegang als Ordnerregal, reines CSS -->
+          <div class="registratur" aria-hidden="true">
+            <span class="ordner"><b>1995</b><em>Werkbank</em></span>
+            <span class="ordner"><b>2000</b><em>Umschulung</em></span>
+            <span class="ordner"><b>2003</b><em>Web</em></span>
+            <span class="ordner"><b>2013</b><em>E-Commerce</em></span>
+            <span class="ordner"><b>2022</b><em>Rathaus</em></span>
+            <span class="ordner ordner--aktuell"><b>heute</b><em>KI</em></span>
+          </div>
           <p>
             Ich bin Andreas und arbeite als IT-Application Analyst bei der Hansestadt Attendorn.
             Eingestellt wurde ich 2022 für das Onlinezugangsgesetz und das Serviceportal. Über ein

@@ -21,7 +21,9 @@ des Repositorys (übergeordneter Ordner).
 - DOM nur mit `textContent` befüllen, kein `innerHTML`.
 - E-Mail-Adresse nie als Klartext ins HTML; sie wird in `main.js` zusammengesetzt
   (`.js-email`, mit `data-show-address` wird die Adresse auch angezeigt).
-- Farben nur über die Tokens in `:root` (hell) bzw. `prefers-color-scheme: dark`.
+- Farben nur über die Tokens in `:root` (hell) und im dunklen Block. Der dunkle Block steht
+  zweimal (Systemeinstellung und `:root[data-theme="dark"]` für den Umschalter im Menü),
+  Änderungen immer in beiden nachziehen. Die Wahl im Umschalter wird nicht gespeichert.
 - Barrierefreiheit erhalten: semantische Elemente, `<details>` für Aufklappbares,
   `aria-pressed` bei Filtern, sichtbarer Fokus, Kontraste ≥ WCAG AA.
 - Commits mit der anonymen GitHub-Adresse (in der lokalen Git-Konfiguration hinterlegt),

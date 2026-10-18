@@ -110,6 +110,13 @@
     profil.projekte.forEach(function (p) {
       const card = el("article", "card");
       const head = el("div", "card__head");
+      // Experiment: kleine Zeichnung aus reinem CSS. Die leeren <i> sind Bauteile dafür.
+      if (p.grafik) {
+        const g = el("span", "grafik grafik--" + p.grafik);
+        g.setAttribute("aria-hidden", "true");
+        for (let i = 0; i < 4; i++) g.append(el("i"));
+        head.append(g);
+      }
       head.append(el("h3", "card__title", p.titel));
       if (p.status) head.append(el("span", "badge", p.status));
       card.append(head);
@@ -189,6 +196,29 @@
     });
   }
 
+  // Umschalter hell/dunkel. Voreingestellt ist die Systemeinstellung. Die Wahl wird
+  // bewusst nicht gespeichert (keine Cookies, kein localStorage) und gilt bis zum Neuladen.
+  function setupTheme() {
+    const button = document.querySelector(".theme-toggle");
+    if (!button) return;
+    const root = document.documentElement;
+    const system = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function istDunkel() {
+      return root.dataset.theme ? root.dataset.theme === "dark" : system.matches;
+    }
+    function anzeigen() {
+      button.setAttribute("aria-pressed", String(istDunkel()));
+    }
+    button.addEventListener("click", function () {
+      root.dataset.theme = istDunkel() ? "light" : "dark";
+      anzeigen();
+    });
+    // Ändert sich die Systemeinstellung, solange niemand umgeschaltet hat, mitziehen.
+    system.addEventListener("change", anzeigen);
+    anzeigen();
+  }
+
   // Hintergrund-Epochen: Papierakte → PDF → Webseite → KI.
   // Jeder Abschnitt mit data-epoche="n" ist ein Ankerpunkt. Rund um jeden Anker
   // wird über eine halbe Bildschirmhöhe von der vorigen Epoche übergeblendet.
@@ -248,6 +278,7 @@
   renderProfileLinks();
   setupEmail();
   setupNav();
+  setupTheme();
   setupEpochen();
   document.querySelectorAll(".js-year").forEach(function (y) {
     y.textContent = String(new Date().getFullYear());
