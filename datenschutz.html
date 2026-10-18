@@ -8,6 +8,16 @@
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    // Früh auswerten, damit nichts im falschen Design aufblitzt: ?design=hell|dunkel
+    // kommt vom Umschalter auf der Startseite und wird über interne Links weitergereicht.
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js");
+      var m = /[?&]design=(hell|dunkel)(?:&|$)/.exec(location.search);
+      if (m) root.dataset.theme = m[1] === "dunkel" ? "dark" : "light";
+    })();
+  </script>
 </head>
 <body>
   <main class="legal">

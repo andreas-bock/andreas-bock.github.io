@@ -196,9 +196,34 @@
     });
   }
 
+  // Gewähltes Design an interne Links und an die eigene Adresse hängen (?design=hell|dunkel),
+  // damit es auf Impressum und Datenschutz und beim Zurückgehen erhalten bleibt.
+  // Ohne manuelle Wahl bleiben alle Links unverändert.
+  function designWeitergeben() {
+    const theme = document.documentElement.dataset.theme;
+    const wert = theme === "dark" ? "dunkel" : theme === "light" ? "hell" : "";
+
+    function anpassen(url) {
+      if (wert) url.searchParams.set("design", wert);
+      else url.searchParams.delete("design");
+      return url;
+    }
+
+    document.querySelectorAll("a[href]").forEach(function (a) {
+      const href = a.getAttribute("href");
+      if (!href || href.charAt(0) === "#") return; // Sprungmarken auf derselben Seite
+      const url = new URL(href, location.href);
+      if (url.origin !== location.origin) return;   // fremde Seiten, mailto, tel
+      a.setAttribute("href", anpassen(url).href);
+    });
+    if (wert) history.replaceState(history.state, "", anpassen(new URL(location.href)).href);
+  }
+
   // Umschalter hell/dunkel. Voreingestellt ist die Systemeinstellung. Die Wahl wird
-  // bewusst nicht gespeichert (keine Cookies, kein localStorage) und gilt bis zum Neuladen.
+  // bewusst nicht gespeichert (keine Cookies, kein localStorage), sondern nur über
+  // den Parameter ?design= an die anderen Seiten weitergegeben.
   function setupTheme() {
+    designWeitergeben();
     const button = document.querySelector(".theme-toggle");
     if (!button) return;
     const root = document.documentElement;
@@ -213,6 +238,7 @@
     button.addEventListener("click", function () {
       root.dataset.theme = istDunkel() ? "light" : "dark";
       anzeigen();
+      designWeitergeben();
     });
     // Ändert sich die Systemeinstellung, solange niemand umgeschaltet hat, mitziehen.
     system.addEventListener("change", anzeigen);

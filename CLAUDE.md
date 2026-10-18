@@ -23,7 +23,9 @@ des Repositorys (übergeordneter Ordner).
   (`.js-email`, mit `data-show-address` wird die Adresse auch angezeigt).
 - Farben nur über die Tokens in `:root` (hell) und im dunklen Block. Der dunkle Block steht
   zweimal (Systemeinstellung und `:root[data-theme="dark"]` für den Umschalter im Menü),
-  Änderungen immer in beiden nachziehen. Die Wahl im Umschalter wird nicht gespeichert.
+  Änderungen immer in beiden nachziehen. Die Wahl im Umschalter wird nicht gespeichert,
+  sondern als `?design=hell|dunkel` an interne Links und die eigene Adresse gehängt
+  (`designWeitergeben` in `main.js`, ausgewertet im Inline-Skript im Kopf jeder Seite).
 - Barrierefreiheit erhalten: semantische Elemente, `<details>` für Aufklappbares,
   `aria-pressed` bei Filtern, sichtbarer Fokus, Kontraste ≥ WCAG AA.
 - Commits mit der anonymen GitHub-Adresse (in der lokalen Git-Konfiguration hinterlegt),
