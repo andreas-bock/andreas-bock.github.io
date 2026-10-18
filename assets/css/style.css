@@ -1,0 +1,802 @@
+/* ==========================================================================
+   Webseite Andreas Bock
+   Leitidee: Beim Scrollen modernisiert sich die Verwaltung im Hintergrund,
+   von der Papierakte über PDF und Online-Formular bis zum KI-Assistenten.
+
+   Vorbild für den Vordergrund ist die Amtsstube selbst:
+   - Recyclingpapier statt Hochglanz, Grünstift als Akzent (in Behörden die Farbe
+     der Leitung), Stempelviolett für Status-Stempel und später den KI-Assistenten.
+   - DIN als Schrift der Amtsschilder für Überschriften und Beschriftungen,
+     eine ruhige Serif für den Fließtext.
+   - Formular-Layout: Randspalte mit „§ n“ und Überschrift, rechts der Inhalt.
+   Nur Systemschriften, nichts wird von fremden Servern geladen.
+   ========================================================================== */
+
+:root {
+  /* Inhalt */
+  --text: #1f2321;
+  --muted: #4f5551;
+  --line: #c3c3b8;
+  --line-strong: #74766c;
+  --surface: #fafaf6;
+  --accent: #0b654f;          /* Grünstift */
+  --accent-strong: #074a3a;
+  --accent-soft: #dde9e2;
+  --on-accent: #ffffff;
+  --stempel: #5a3e91;         /* Stempelkissen */
+  --focus: #b8420d;
+
+  /* Epochen-Hintergründe */
+  --akte-bg: #e3e2da;         /* Recyclingpapier */
+  --akte-ink: #66665b;
+  --akte-linie: rgb(70 80 75 / 0.10);
+  --akte-loch: rgb(40 40 34 / 0.16);
+  --pdf-bg: #dcdee2;          /* Grau des PDF-Betrachters */
+  --pdf-ink: #5c636d;
+  --pdf-blatt: rgb(255 255 255 / 0.38);
+  --web-bg: #e6edf1;
+  --web-ink: #476378;
+  --web-raster: rgb(40 90 120 / 0.07);
+  --ki-bg: #e9e7f1;
+  --ki-ink: #5a4f98;
+
+  --din: Bahnschrift, "DIN Alternate", "DIN Next", "D-DIN", "Roboto Condensed",
+         "Arial Narrow", system-ui, sans-serif;
+  --text-serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --schreibmaschine: "Courier New", Courier, monospace;
+  --header-h: 4rem;
+  --max: 72rem;
+  --rand: 14rem;              /* Breite der Randspalte */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e4e5df;
+    --muted: #a7aaa2;
+    --line: #3a3d38;
+    --line-strong: #6a6e66;
+    --surface: #222421;
+    --accent: #72c4a7;
+    --accent-strong: #a0dcc6;
+    --accent-soft: #1b2e27;
+    --on-accent: #08201a;
+    --stempel: #b7a3e8;
+    --focus: #f59a5b;
+
+    --akte-bg: #1a1b19;
+    --akte-ink: #9c9b8c;
+    --akte-linie: rgb(220 225 215 / 0.05);
+    --akte-loch: rgb(0 0 0 / 0.45);
+    --pdf-bg: #17181b;
+    --pdf-ink: #8b939e;
+    --pdf-blatt: rgb(255 255 255 / 0.03);
+    --web-bg: #111920;
+    --web-ink: #7e9db6;
+    --web-raster: rgb(140 180 210 / 0.06);
+    --ki-bg: #16141f;
+    --ki-ink: #a49be6;
+  }
+}
+
+/* ---------- Grundlagen ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--akte-bg); /* Fallback ohne JavaScript */
+  color: var(--text);
+  font-family: var(--text-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  font-kerning: normal;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--din);
+  font-weight: 600;
+  line-height: 1.1;
+}
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--accent-strong); text-decoration-thickness: 2px; }
+
+a.external::after {
+  content: "\2197"; /* ↗ */
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.8em;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+@media (min-width: 640px) { .container { padding: 0 2rem; } }
+
+.nowrap { white-space: nowrap; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem; top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--din);
+}
+.skip-link:focus { top: 1rem; color: var(--on-accent); }
+
+/* ---------- Epochen im Hintergrund ---------- */
+
+.eras {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.era {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s linear;
+}
+.era--akte { opacity: 1; } /* Startzustand, auch ohne JavaScript */
+
+/* Papierakte: Kanzleilinien und am linken Rand die Lochung für den Ordner */
+.era--akte {
+  color: var(--akte-ink);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 calc(2rem - 1px), var(--akte-linie) calc(2rem - 1px) 2rem),
+    var(--akte-bg);
+}
+@media (min-width: 1100px) {
+  .era--akte {
+    background:
+      radial-gradient(circle at 1.6rem 34%, var(--akte-loch) 0.42rem, transparent 0.5rem),
+      radial-gradient(circle at 1.6rem 66%, var(--akte-loch) 0.42rem, transparent 0.5rem),
+      repeating-linear-gradient(180deg, transparent 0 calc(2rem - 1px), var(--akte-linie) calc(2rem - 1px) 2rem),
+      var(--akte-bg);
+  }
+}
+.era--akte .era__side text { font-family: var(--schreibmaschine); }
+
+/* PDF: das Grau des Betrachters, in der Mitte die helle Seite */
+.era--pdf {
+  color: var(--pdf-ink);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 26rem), var(--pdf-blatt) calc(50% - 26rem), var(--pdf-blatt) calc(50% + 26rem), transparent calc(50% + 26rem)),
+    var(--pdf-bg);
+}
+.era--pdf .era__side text { font-family: Arial, Helvetica, sans-serif; }
+
+.era--web {
+  color: var(--web-ink);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 39px, var(--web-raster) 39px 40px),
+    repeating-linear-gradient(180deg, transparent 0 39px, var(--web-raster) 39px 40px),
+    var(--web-bg);
+}
+.era--web .era__side text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+.era--ki {
+  color: var(--ki-ink);
+  background:
+    radial-gradient(60vw 50vh at 85% 15%, color-mix(in srgb, var(--ki-ink) 14%, transparent), transparent 70%),
+    radial-gradient(50vw 50vh at 10% 90%, color-mix(in srgb, var(--ki-ink) 8%, transparent), transparent 70%),
+    var(--ki-bg);
+}
+.era--ki .era__side text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+.era__side {
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: auto;
+  max-width: 40vw;
+  opacity: 0.14;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.era__side--left { left: 0; }
+.era__side--right { right: 0; }
+@media (min-width: 1100px) { .era__side { opacity: 0.2; } }
+/* Links liegt die Randspalte mit § und Überschrift; dort leiser zeichnen,
+   bis der Seitenrand breit genug ist, dass sich nichts mehr überlappt. */
+@media (min-width: 900px) { .era__side--left { opacity: 0.12; } }
+@media (min-width: 1800px) { .era__side { opacity: 0.5; } }
+
+.era__side text {
+  fill: currentColor;
+  stroke: none;
+  font-size: 13px;
+}
+.era__side text.gross { font-size: 17px; font-weight: 700; }
+.era__side text.klein { font-size: 11px; }
+.era__side .fill { fill: color-mix(in srgb, currentColor 7%, transparent); }
+.era__side .voll { fill: currentColor; }
+.era__side text.invers { fill: var(--surface); font-weight: 700; }
+.era__side .duenn { stroke-width: 1; stroke-dasharray: 4 6; }
+.era--akte .stempel { color: var(--stempel); }
+.era--akte .stempel text { letter-spacing: 0.08em; }
+
+/* Tipp-Punkte des KI-Assistenten */
+.era__side .punkt { fill: currentColor; stroke: none; animation: tippen 1.2s infinite ease-in-out; }
+.era__side .punkt:nth-of-type(2) { animation-delay: 0.15s; }
+.era__side .punkt:nth-of-type(3) { animation-delay: 0.3s; }
+@keyframes tippen {
+  0%, 60%, 100% { opacity: 0.25; }
+  30% { opacity: 1; }
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.55rem 1.4rem;
+  border: 2px solid var(--accent);
+  font-family: var(--din);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+.button--primary { background: var(--accent); color: var(--on-accent); }
+.button--primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.button--ghost { color: var(--accent); background: transparent; }
+.button--ghost:hover { background: var(--accent-soft); color: var(--accent-strong); }
+
+/* ---------- Kopfzeile / Navigation ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--header-h);
+  font-family: var(--din);
+}
+
+.nav__brand {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem; height: 2.5rem;
+  background: var(--text);
+  color: var(--surface);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.nav__brand:hover { background: var(--accent); color: var(--on-accent); }
+
+/* Epochen-Anzeige im Kopf: wie die Schrittanzeige eines Online-Antrags */
+.epoche {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: "label label" "balken name";
+  align-items: center;
+  column-gap: 0.6rem;
+  margin: 0 auto 0 0;
+  line-height: 1.2;
+}
+.epoche__label { grid-area: label; font-size: 0.75rem; color: var(--muted); }
+.epoche__name { grid-area: name; font-size: 0.95rem; font-weight: 600; white-space: nowrap; }
+.epoche__balken { grid-area: balken; display: flex; gap: 2px; }
+.epoche__balken i {
+  width: 0.7rem; height: 0.7rem;
+  border: 1.5px solid var(--line-strong);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.epoche__balken i.is-on { background: var(--accent); border-color: var(--accent); }
+
+.nav__menu a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.02rem;
+}
+.nav__menu a:hover { color: var(--accent); text-decoration: underline; }
+
+.nav__toggle {
+  display: none;
+  flex: none;
+  width: 2.75rem; height: 2.75rem;
+  padding: 0;
+  border: 1.5px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.nav__toggle-bar,
+.nav__toggle-bar::before,
+.nav__toggle-bar::after {
+  display: block;
+  width: 1.2rem; height: 2px;
+  margin: 0 auto;
+  background: currentColor;
+  transition: transform 0.2s;
+}
+.nav__toggle-bar { position: relative; }
+.nav__toggle-bar::before,
+.nav__toggle-bar::after { content: ""; position: absolute; left: 0; }
+.nav__toggle-bar::before { top: -6px; }
+.nav__toggle-bar::after { top: 6px; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar { background: transparent; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar::before { transform: translateY(6px) rotate(45deg); }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar::after { transform: translateY(-6px) rotate(-45deg); }
+
+@media (min-width: 861px) {
+  .nav__menu { display: flex; gap: 1.75rem; }
+}
+
+/* Auf schmalen Bildschirmen klappt das Menü unter der Kopfzeile auf. Ohne JavaScript
+   (kein Klick möglich) bleibt es einfach sichtbar. */
+@media (max-width: 860px) {
+  .js .nav__toggle { display: block; }
+  .nav__menu { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9rem; }
+  .js .nav__menu {
+    position: absolute;
+    top: var(--header-h); left: 0; right: 0;
+    display: none;
+    padding: 0.25rem 1rem 0.75rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .js .nav__menu.is-open { display: block; }
+  .js .nav__menu a { display: block; padding: 0.8rem 0.25rem; border-bottom: 1px solid var(--line); font-size: 1.1rem; }
+  .js .nav__menu li:last-child a { border-bottom: 0; }
+}
+
+/* ---------- Hero ---------- */
+
+.hero { padding: 2.5rem 0 3.5rem; }
+@media (min-width: 761px) { .hero { padding: 5.5rem 0 6rem; } }
+
+.hero__inner {
+  display: grid;
+  gap: 2.25rem;
+  align-items: start;
+}
+@media (min-width: 761px) {
+  .hero__inner { grid-template-columns: 1fr auto; gap: 4rem; align-items: center; }
+}
+
+/* Beschriftungsfeld vom Aktendeckel */
+.aktenschild {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  gap: 1.5px;
+  margin-bottom: 1.75rem;
+  border: 1.5px solid var(--line-strong);
+  background: var(--line-strong);
+  font-family: var(--din);
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+@media (min-width: 480px) { .aktenschild { grid-template-columns: repeat(3, auto); } }
+.aktenschild__feld { padding: 0.35rem 0.75rem; background: var(--surface); }
+.aktenschild__feld:first-child { background: var(--text); color: var(--surface); }
+@media (max-width: 479px) { .aktenschild__feld:first-child { grid-column: 1 / -1; } }
+
+.hero__title {
+  font-size: clamp(2.75rem, 10vw, 5.75rem);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.hero__lead {
+  margin: 1.5rem 0 1.75rem;
+  max-width: 32rem;
+  font-size: clamp(1.15rem, 2.6vw, 1.35rem);
+  line-height: 1.55;
+}
+.hero__roles {
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent);
+  font-family: var(--din);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.25rem; }
+
+/* Passbild mit Büroklammer */
+.passbild {
+  position: relative;
+  margin: 0;
+  order: -1;
+  justify-self: start;
+  width: clamp(7.5rem, 26vw, 14rem);
+  padding: 0.55rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  transform: rotate(2deg);
+}
+@media (min-width: 761px) { .passbild { order: 0; justify-self: end; margin-right: 1rem; } }
+/* Solange nur der Platzhalter drin ist, braucht das Handy dafür keinen Platz. */
+@media (max-width: 760px) { .passbild:has(.passbild__bild--leer) { display: none; } }
+.passbild::before { /* Büroklammer */
+  content: "";
+  position: absolute;
+  top: -1.1rem; left: 1.4rem;
+  width: 0.9rem; height: 2.6rem;
+  border: 2px solid var(--line-strong);
+  border-radius: 0.5rem;
+  transform: rotate(-6deg);
+}
+.passbild img,
+.passbild__bild {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 35 / 45;
+  object-fit: cover;
+}
+.passbild__bild--leer {
+  display: grid;
+  place-content: center;
+  gap: 0.1rem;
+  text-align: center;
+  border: 1px dashed var(--line-strong);
+  color: var(--muted);
+  font-family: var(--din);
+  font-size: 0.95rem;
+}
+.passbild__bild--leer small { font-size: 0.8rem; }
+
+/* ---------- Abschnitte: Randspalte mit § und Überschrift ---------- */
+
+.section { padding: 3.5rem 0; border-top: 1px solid var(--line-strong); }
+@media (min-width: 761px) { .section { padding: 5rem 0; } }
+
+.section__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+@media (min-width: 900px) {
+  .section__grid { grid-template-columns: var(--rand) minmax(0, 1fr); gap: 3rem; }
+  .section__head {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    align-self: start;
+  }
+}
+
+.section__nr {
+  margin: 0 0 0.1rem;
+  font-family: var(--din);
+  font-size: clamp(2.75rem, 7vw, 4.25rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--accent);
+}
+.section__title {
+  font-size: clamp(1.75rem, 4vw, 2.1rem);
+  font-stretch: 87.5%;
+  letter-spacing: -0.01em;
+}
+.section__body { min-width: 0; max-width: 44rem; }
+.section__intro { color: var(--muted); margin-bottom: 2rem; }
+
+/* ---------- Über mich ---------- */
+
+.about > p { max-width: 40rem; }
+
+/* Kurzfassung als ausgefülltes Formular: Vordruck klein, Eintrag in Grünstift */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 2.5rem;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+}
+@media (min-width: 640px) { .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.fact {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding: 0.6rem 0.8rem 0.9rem;
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+}
+.fact__value {
+  font-family: var(--din);
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--accent);
+}
+.fact__label { font-family: var(--din); font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
+@media (max-width: 639px) {
+  .fact:nth-child(2n) { border-right: 0; }
+  .fact:nth-last-child(-n+2) { border-bottom: 0; }
+}
+@media (min-width: 640px) {
+  .fact { border-bottom: 0; }
+  .fact:last-child { border-right: 0; }
+}
+
+/* ---------- Werdegang (Zeitleiste) ---------- */
+
+.timeline { border-left: 2px solid var(--line-strong); margin-left: 0.4rem; }
+
+.timeline__item { position: relative; padding: 0 0 0 1.1rem; }
+@media (min-width: 640px) { .timeline__item { padding-left: 1.5rem; } }
+.timeline__item + .timeline__item { margin-top: 0.25rem; }
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: calc(-0.4rem - 1px); top: 1.25rem;
+  width: 0.8rem; height: 0.8rem;
+  background: var(--akte-bg);
+  border: 2px solid var(--accent);
+}
+.timeline__item--current::before { background: var(--accent); }
+
+.timeline__head { padding: 0.9rem 0; }
+.timeline__date {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--din);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.timeline__title { font-size: 1.3rem; }
+.timeline__place { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.98rem; line-height: 1.5; }
+
+.timeline__details {
+  border-bottom: 1px solid var(--line);
+}
+.timeline__item:last-child .timeline__details { border-bottom: 0; }
+.timeline__details[open] {
+  margin: 0.5rem 0;
+  padding: 0 0.85rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+}
+.timeline__details[open] .timeline__head { padding-top: 1rem; }
+
+.timeline__summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+}
+.timeline__summary::-webkit-details-marker { display: none; }
+.timeline__summary .timeline__head { padding-right: 3rem; }
+/* Plus und Minus im Kästchen zeigen, ob die Station aufgeklappt ist */
+.timeline__summary::after {
+  content: "+";
+  position: absolute;
+  right: 0; top: 1rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem; height: 1.75rem;
+  border: 1.5px solid var(--line-strong);
+  font-family: var(--din);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--accent);
+}
+.timeline__details[open] > .timeline__summary::after { content: "\2212"; top: 1rem; }
+.timeline__summary:hover .timeline__title { color: var(--accent); }
+.timeline__summary:hover::after { border-color: var(--accent); }
+
+.timeline__story {
+  margin: 0.25rem 0 1.25rem;
+  padding: 0.25rem 0 0.25rem 0.85rem;
+  border-left: 3px solid var(--accent);
+}
+.timeline__story p + p { margin-top: 0.75em; }
+
+.timeline__list {
+  padding: 0 0 1rem 1.15rem;
+  list-style: square;
+}
+.timeline__list li { padding-left: 0.3rem; }
+.timeline__list li + li { margin-top: 0.35rem; }
+.timeline__list li::marker { color: var(--accent); }
+
+/* ---------- Kenntnisse: Filter als Aktenreiter über dem Registerblatt ---------- */
+
+.filter {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: -1.5px;
+  position: relative;
+  z-index: 1;
+  /* Reiter bleiben in einer Reihe am Registerblatt; wird es eng, lässt sich die Reihe wischen. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter::-webkit-scrollbar { display: none; }
+.filter__button {
+  flex: none;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.7rem;
+  border: 1.5px solid var(--line-strong);
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+  color: var(--muted);
+  font-family: var(--din);
+  font-size: 0.98rem;
+  cursor: pointer;
+}
+.filter__button:hover { color: var(--accent); }
+.filter__button:focus-visible { outline-offset: -4px; } /* sonst schneidet die Reihe den Rahmen ab */
+.filter__button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: inset 0 3px 0 var(--accent);
+  border-bottom-color: var(--surface);
+}
+
+.skills {
+  display: grid;
+  gap: 1.75rem;
+  padding: 1.5rem 1.25rem;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+}
+@media (min-width: 640px) { .skills { padding: 1.75rem; } }
+.skills__title {
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-family: var(--din);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.tags--small { gap: 0.3rem 0.4rem; }
+.tags--small .tag { font-size: 0.85rem; padding: 0.05rem 0.45rem; border-color: var(--line); color: var(--muted); }
+
+/* ---------- Projekte: jedes Projekt ein eigenes Blatt ---------- */
+
+.projects { display: grid; gap: 1.25rem; }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.5rem 1.25rem;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+}
+@media (min-width: 640px) { .card { padding: 1.75rem; } }
+
+.card__head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.card__title { font-size: 1.4rem; font-stretch: 87.5%; }
+.card__text { margin: 0; color: var(--text); }
+.card__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--din); font-size: 1.05rem; }
+
+.card__story {
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+}
+.card__story-label {
+  margin-bottom: 0.2rem;
+  font-family: var(--din);
+  font-size: 0.95rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Status als Stempel */
+.badge {
+  padding: 0.05rem 0.5rem;
+  border: 2px solid var(--stempel);
+  border-radius: 2px;
+  color: var(--stempel);
+  font-family: var(--din);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transform: rotate(-4deg);
+}
+
+/* ---------- Kontakt ---------- */
+
+.contact__lead {
+  max-width: 34rem;
+  margin-bottom: 1.75rem;
+  font-size: clamp(1.2rem, 2.6vw, 1.4rem);
+  line-height: 1.5;
+}
+.contact__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; margin-top: 1.75rem; font-family: var(--din); font-size: 1.05rem; }
+
+/* ---------- Fußzeile ---------- */
+
+.site-footer {
+  padding: 2rem 0;
+  border-top: 1.5px solid var(--line-strong);
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  color: var(--muted);
+  font-family: var(--din);
+  font-size: 0.95rem;
+}
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+.site-footer p { margin: 0; }
+.site-footer__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.site-footer a { color: var(--muted); }
+.site-footer a:hover { color: var(--accent); }
+
+/* ---------- Rechtstexte (Impressum, Datenschutz) ---------- */
+
+.legal { padding: 2rem 0 4rem; }
+@media (min-width: 640px) { .legal { padding: 3rem 0 4rem; } }
+.legal .container {
+  max-width: 46rem;
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+}
+@media (max-width: 639px) { .legal .container { border-left: 0; border-right: 0; } }
+.legal h1 { font-size: clamp(2rem, 6vw, 2.75rem); font-stretch: 87.5%; margin-bottom: 2rem; }
+.legal h2 { font-size: 1.25rem; margin: 2.25rem 0 0.75rem; }
+.legal ul { list-style: square; padding-left: 1.4rem; margin-bottom: 1em; }
+.legal li::marker { color: var(--accent); }
+.legal address { font-style: normal; margin-bottom: 1em; }
+.legal__back { display: inline-block; margin-bottom: 2rem; font-family: var(--din); font-size: 1.05rem; }
+.legal__stand { margin-top: 2.5rem; color: var(--muted); font-family: var(--din); font-size: 0.9rem; }

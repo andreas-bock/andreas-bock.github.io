@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andreas Bock | Verwaltungs-IT &amp; KI</title>
+  <meta name="description" content="Andreas Bock, IT-Application Analyst aus Attendorn. Ich bringe Digitalisierung, KI und RPA in die Verwaltung. Hier gibt es meinen Werdegang, meine Kenntnisse und meine Projekte.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <!-- Hintergrund: Die Verwaltung modernisiert sich beim Scrollen.
+       Papierakte → PDF → Webseite → KI. Rein dekorativ, Steuerung in main.js. -->
+  <div class="eras" aria-hidden="true">
+    <div class="era era--akte is-active" data-era="0">
+      <svg class="era__side era__side--left" viewBox="0 0 320 800" preserveAspectRatio="xMinYMid meet">
+        <g transform="rotate(-5 140 170)"><rect x="50" y="70" width="180" height="230"/></g>
+        <g transform="rotate(2 150 175)">
+          <rect x="60" y="62" width="180" height="230" class="fill"/>
+          <path d="M80 100h140M80 120h140M80 140h110M80 160h140M80 180h90M80 220h140M80 240h120"/>
+        </g>
+        <g class="ordner">
+          <rect x="34" y="380" width="70" height="330" class="fill"/>
+          <rect x="46" y="420" width="46" height="150"/>
+          <circle cx="69" cy="640" r="14"/>
+          <text x="0" y="0" transform="translate(76 560) rotate(-90)">Bauanträge 1998</text>
+          <rect x="114" y="380" width="70" height="330" class="fill"/>
+          <rect x="126" y="420" width="46" height="150"/>
+          <circle cx="149" cy="640" r="14"/>
+          <text x="0" y="0" transform="translate(156 560) rotate(-90)">Gewerbe A bis K</text>
+          <rect x="194" y="400" width="70" height="310" class="fill" transform="rotate(4 229 710)"/>
+          <rect x="206" y="440" width="46" height="140" transform="rotate(4 229 710)"/>
+          <circle cx="229" cy="650" r="14" transform="rotate(4 229 710)"/>
+          <path d="M10 712h300"/>
+        </g>
+      </svg>
+      <svg class="era__side era__side--right" viewBox="0 0 320 800" preserveAspectRatio="xMaxYMid meet">
+        <g class="stempel" transform="rotate(-12 170 190)">
+          <circle cx="170" cy="190" r="78"/>
+          <circle cx="170" cy="190" r="64"/>
+          <text x="170" y="178" text-anchor="middle" class="gross">EINGANG</text>
+          <text x="170" y="206" text-anchor="middle">12. MRZ 1998</text>
+          <text x="170" y="228" text-anchor="middle">Az. 32-14</text>
+        </g>
+        <path d="M118 360v-34a16 16 0 0 1 32 0v74a26 26 0 0 1-52 0v-62" class="klammer"/>
+        <g transform="rotate(3 170 590)">
+          <rect x="70" y="440" width="200" height="290" class="fill"/>
+          <text x="90" y="478" class="gross">Laufzettel</text>
+          <rect x="90" y="505" width="14" height="14"/><path d="M93 512l4 4 7-9"/><path d="M116 512h120"/>
+          <rect x="90" y="540" width="14" height="14"/><path d="M93 547l4 4 7-9"/><path d="M116 547h100"/>
+          <rect x="90" y="575" width="14" height="14"/><path d="M116 582h130"/>
+          <rect x="90" y="610" width="14" height="14"/><path d="M116 617h90"/>
+          <text x="90" y="680">Zur Kenntnis:</text>
+          <path d="M90 705c20-12 30 8 50-4s30-10 45 2"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="era era--pdf" data-era="1">
+      <svg class="era__side era__side--left" viewBox="0 0 320 800" preserveAspectRatio="xMinYMid meet">
+        <g>
+          <path d="M60 90h120l40 40v190H60z" class="fill"/><path d="M180 90v40h40"/>
+          <rect x="84" y="150" width="56" height="28" class="voll"/><text x="112" y="170" text-anchor="middle" class="invers">PDF</text>
+          <path d="M84 200h112M84 220h112M84 240h80M84 260h112M84 280h60"/>
+          <text x="60" y="350">Antrag_final_v3.pdf</text>
+        </g>
+        <g transform="translate(20 0)">
+          <path d="M60 430h120l40 40v190H60z" class="fill"/><path d="M180 430v40h40"/>
+          <rect x="84" y="490" width="56" height="28" class="voll"/><text x="112" y="510" text-anchor="middle" class="invers">PDF</text>
+          <path d="M84 540h112M84 560h112M84 580h80M84 600h112"/>
+          <text x="60" y="690">Formular_NEU(2).pdf</text>
+        </g>
+      </svg>
+      <svg class="era__side era__side--right" viewBox="0 0 320 800" preserveAspectRatio="xMaxYMid meet">
+        <g>
+          <rect x="70" y="130" width="200" height="56" rx="4" class="fill"/>
+          <path d="M100 146v18m-8-8 8 8 8-8M90 172h20"/>
+          <text x="128" y="164">Herunterladen</text>
+          <path d="M226 168l0 30 8-7 6 12 6-3-6-12 10-1z" class="voll"/>
+        </g>
+        <g>
+          <rect x="80" y="300" width="180" height="120" rx="6" class="fill"/>
+          <rect x="105" y="270" width="130" height="40" class="fill"/>
+          <rect x="105" y="400" width="130" height="80" class="fill"/>
+          <path d="M120 425h100M120 445h100M120 465h70"/>
+          <circle cx="235" cy="330" r="5" class="voll"/>
+          <text x="80" y="520">Ausdrucken, ausfüllen,</text>
+          <text x="80" y="542">unterschreiben, einscannen.</text>
+        </g>
+        <g>
+          <rect x="90" y="600" width="160" height="110" rx="4" class="fill"/>
+          <path d="M90 625h160"/>
+          <text x="104" y="618">Posteingang (37)</text>
+          <path d="M104 648h120M104 668h96M104 688h110"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="era era--web" data-era="2">
+      <svg class="era__side era__side--left" viewBox="0 0 320 800" preserveAspectRatio="xMinYMid meet">
+        <g>
+          <rect x="30" y="110" width="270" height="340" rx="8" class="fill"/>
+          <path d="M30 146h270"/>
+          <circle cx="52" cy="128" r="6"/><circle cx="72" cy="128" r="6"/><circle cx="92" cy="128" r="6"/>
+          <rect x="112" y="118" width="170" height="20" rx="10"/>
+          <text x="124" y="133">serviceportal</text>
+          <text x="54" y="186" class="gross">Antrag online stellen</text>
+          <text x="54" y="220">Name</text><rect x="54" y="228" width="222" height="30" rx="3"/>
+          <text x="54" y="282">E-Mail</text><rect x="54" y="290" width="222" height="30" rx="3"/>
+          <rect x="54" y="338" width="16" height="16" rx="3"/><path d="M57 346l4 4 7-9"/>
+          <text x="80" y="351">Daten sind korrekt</text>
+          <rect x="54" y="378" width="110" height="36" rx="4" class="voll"/>
+          <text x="109" y="401" text-anchor="middle" class="invers">Absenden</text>
+        </g>
+        <g>
+          <rect x="60" y="520" width="210" height="120" rx="6" class="fill"/>
+          <circle cx="94" cy="560" r="18"/><path d="M86 560l6 6 11-13"/>
+          <text x="126" y="556" class="gross">Eingegangen</text>
+          <text x="126" y="578">Vorgang 2024-0815</text>
+          <path d="M84 608h160"/>
+        </g>
+      </svg>
+      <svg class="era__side era__side--right" viewBox="0 0 320 800" preserveAspectRatio="xMaxYMid meet">
+        <g>
+          <rect x="110" y="200" width="150" height="300" rx="22" class="fill"/>
+          <path d="M165 218h40"/>
+          <rect x="128" y="240" width="114" height="60" rx="6"/>
+          <rect x="128" y="312" width="114" height="60" rx="6"/>
+          <rect x="128" y="384" width="114" height="60" rx="6"/>
+          <path d="M140 262h70M140 280h50M140 334h80M140 352h40M140 406h60M140 424h70"/>
+          <circle cx="185" cy="474" r="10"/>
+        </g>
+        <path d="M60 140h40v40h-40zM70 150h20v20h-20z"/>
+        <path d="M60 560h200M60 580h160M60 600h180" class="duenn"/>
+      </svg>
+    </div>
+
+    <div class="era era--ki" data-era="3">
+      <!-- Links: Chat mit dem Assistenten. Rechts: woher die Antwort kommt,
+           vorhandene Daten der Verwaltung fließen in die KI, die Antwort nennt die Quelle. -->
+      <svg class="era__side era__side--left" viewBox="0 0 320 800" preserveAspectRatio="xMinYMid meet">
+        <g>
+          <rect x="30" y="140" width="270" height="420" rx="14" class="fill"/>
+          <path d="M30 186h270"/>
+          <text x="52" y="170" class="gross">Assistent</text>
+          <rect x="54" y="206" width="230" height="64" rx="14" class="voll"/>
+          <text x="70" y="232" class="invers">Was brauche ich für</text>
+          <text x="70" y="252" class="invers">einen Anwohnerparkausweis?</text>
+          <rect x="46" y="290" width="210" height="112" rx="14"/>
+          <path d="M62 316h176M62 336h150M62 356h166"/>
+          <rect x="62" y="370" width="132" height="20" rx="10"/>
+          <text x="128" y="384" text-anchor="middle" class="klein">Quelle: Satzung § 3</text>
+          <rect x="46" y="422" width="78" height="38" rx="14"/>
+          <circle class="punkt" cx="68" cy="441" r="5"/>
+          <circle class="punkt" cx="85" cy="441" r="5"/>
+          <circle class="punkt" cx="102" cy="441" r="5"/>
+          <rect x="46" y="500" width="238" height="40" rx="20"/>
+          <text x="64" y="525">Frage stellen …</text>
+        </g>
+      </svg>
+      <svg class="era__side era__side--right" viewBox="0 0 320 800" preserveAspectRatio="xMaxYMid meet">
+        <g>
+          <!-- Datenquellen -->
+          <path d="M50 120v-8h44v56h-8"/>
+          <path d="M42 120h32l12 12v44H42z" class="fill"/><path d="M74 120v12h12M50 144h28M50 154h28M50 164h18"/>
+          <text x="64" y="200" text-anchor="middle">Satzungen</text>
+          <ellipse cx="160" cy="120" rx="30" ry="9" class="fill"/>
+          <path d="M130 120v46a30 9 0 0 0 60 0v-46M130 143a30 9 0 0 0 60 0"/>
+          <text x="160" y="200" text-anchor="middle">Fachdaten</text>
+          <rect x="224" y="112" width="54" height="62" rx="4" class="fill"/>
+          <path d="M224 126h54"/>
+          <text x="251" y="160" text-anchor="middle" class="gross">?</text>
+          <text x="251" y="200" text-anchor="middle">FAQ</text>
+          <!-- zusammenführen -->
+          <path d="M64 212v40M160 212v40M251 212v40M64 252h187"/>
+          <path d="M160 252v46m-7-8 7 8 7-8"/>
+          <!-- KI -->
+          <circle cx="160" cy="362" r="58" class="duenn"/>
+          <circle cx="160" cy="362" r="44" class="fill"/>
+          <text x="160" y="368" text-anchor="middle" class="gross">KI</text>
+          <path d="M160 422v42m-7-8 7 8 7-8"/>
+          <!-- Antwort mit Quellenangabe -->
+          <path d="M74 472h172a14 14 0 0 1 14 14v82a14 14 0 0 1-14 14H104l-20 16 4-16h-14a14 14 0 0 1-14-14v-82a14 14 0 0 1 14-14z" class="fill"/>
+          <text x="78" y="500" class="gross">Antwort</text>
+          <path d="M78 520h162M78 538h124"/>
+          <rect x="78" y="552" width="132" height="20" rx="10" class="voll"/>
+          <text x="144" y="566" text-anchor="middle" class="klein invers">Quelle: Satzung § 3</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Hauptnavigation">
+      <a class="nav__brand" href="#top" aria-label="Andreas Bock, zum Seitenanfang">AB</a>
+      <p class="epoche" aria-hidden="true">
+        <span class="epoche__label">Stand der Technik</span>
+        <span class="epoche__name" data-epoche-name>Papierakte</span>
+        <span class="epoche__balken"><i></i><i></i><i></i><i></i></span>
+      </p>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menü</span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="#werdegang">Werdegang</a></li>
+        <li><a href="#kenntnisse">Kenntnisse</a></li>
+        <li><a href="#projekte">Projekte</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <!-- Beschriftungsfeld wie auf einem Aktendeckel -->
+          <p class="aktenschild">
+            <span class="aktenschild__feld">Betreff: Über mich</span>
+            <span class="aktenschild__feld">Andreas Bock</span>
+            <span class="aktenschild__feld">Attendorn</span>
+          </p>
+          <h1 class="hero__title"><span class="nowrap">Verwaltungs-IT</span> trifft KI.</h1>
+          <p class="hero__lead">
+            Ich bringe KI und Digitalisierung in die Verwaltung. Und zwar so, dass sie im
+            Arbeitsalltag auch wirklich ankommen.
+          </p>
+          <ul class="hero__roles">
+            <li>IT-Application Analyst</li>
+            <li>Fachinformatiker Anwendungsentwicklung</li>
+            <li>OZG, Digitalisierung, KI&nbsp;&amp;&nbsp;RPA</li>
+            <li>Agentic Coding: Programmieren mit KI</li>
+          </ul>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#kontakt">Kontakt</a>
+            <a class="button button--ghost" href="#werdegang">Zum Werdegang</a>
+          </div>
+        </div>
+        <!-- Passbild mit Büroklammer. Bild im Format 35:45. -->
+        <figure class="passbild">
+          <img src="assets/img/andreas-bock.jpg" alt="Porträt von Andreas Bock" width="467" height="600">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="ueber-mich" aria-labelledby="ueber-mich-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">§ 1</p>
+          <h2 class="section__title" id="ueber-mich-titel">Über mich</h2>
+        </header>
+        <div class="section__body about">
+          <p>
+            Ich bin Andreas und arbeite als IT-Application Analyst bei der Hansestadt Attendorn.
+            Eingestellt wurde ich 2022 für das Onlinezugangsgesetz und das Serviceportal. Über ein
+            paar Umwege, unter anderem den „ChatGPT-Moment“, bin ich inzwischen bei dem Thema
+            gelandet, das mich am meisten reizt: KI und Automatisierung so in die Abläufe zu
+            bringen, dass sie den Kolleginnen und Kollegen tatsächlich Arbeit abnehmen.
+          </p>
+          <p>
+            In letzter Zeit beschäftige ich mich vor allem mit Agentic Coding, also dem
+            Programmieren mit KI. Ich habe damit Webseiten und Webanwendungen gebaut, größere
+            Projekte wie LOKIWO und Programme für Retrocomputer. Dazu kommen ein paar kleine
+            Helfer, die mir am Pen-and-Paper-Spieltisch die Verwaltung abnehmen. Die
+            Verwaltung lässt mich eben nicht los.
+          </p>
+          <p>
+            Inzwischen kenne ich mich damit richtig gut aus. Den Code schreibe ich meist nicht
+            mehr selbst: Ich lege fest, wie etwas aufgebaut wird, prüfe, was die KI daraus macht,
+            und greife ein, wenn es hakt. Unterm Strich bin ich eher Softwarearchitekt als
+            Programmierer. Dass ich Anwendungsentwicklung gelernt habe und programmiere, seit ich
+            als Kind vor dem C64 saß, kommt mir dabei jetzt richtig zugute.
+          </p>
+          <p>
+            Beruflich angefangen habe ich übrigens nicht am Rechner, sondern an der Werkbank: Ich bin
+            gelernter Werkzeugmechaniker. Über eine Umschulung zum Fachinformatiker
+            Anwendungsentwicklung bin ich in die IT gewechselt und dort hängen geblieben. Das ist
+            jetzt über 20&nbsp;Jahre her. Dazwischen lagen viele Jahre Webentwicklung und E-Commerce.
+          </p>
+          <ul class="facts" aria-label="Kurz zusammengefasst">
+          <li class="fact"><span class="fact__value">20+</span><span class="fact__label">Jahre in der IT</span></li>
+          <li class="fact"><span class="fact__value">seit 2022</span><span class="fact__label">in der Verwaltungs-IT</span></li>
+          <li class="fact"><span class="fact__value">KI &amp; RPA</span><span class="fact__label">das, woran ich gerade arbeite</span></li>
+          <li class="fact"><span class="fact__value">Attendorn</span><span class="fact__label">geboren, aufgewachsen, geblieben</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-epoche="1" id="werdegang" aria-labelledby="werdegang-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">§ 2</p>
+          <h2 class="section__title" id="werdegang-titel">Werdegang</h2>
+        </header>
+        <div class="section__body">
+          <p class="section__intro">Von der Werkbank ins Rathaus. Ein Klick auf eine Station zeigt die Details.</p>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-epoche="2" id="kenntnisse" aria-labelledby="kenntnisse-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">§ 3</p>
+          <h2 class="section__title" id="kenntnisse-titel">Kenntnisse</h2>
+        </header>
+        <div class="section__body">
+          <div class="filter" role="group" aria-label="Kenntnisse filtern" id="skill-filter"></div>
+          <div class="skills" id="skills" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-epoche="3" id="projekte" aria-labelledby="projekte-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">§ 4</p>
+          <h2 class="section__title" id="projekte-titel">Projekte</h2>
+        </header>
+        <div class="section__body">
+          <p class="section__intro">
+            Ein paar Dinge, die ich gebaut habe. Manche für die Stadt, manche aus reiner Neugier.
+          </p>
+          <div class="projects" id="projects"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="kontakt" aria-labelledby="kontakt-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">§ 5</p>
+          <h2 class="section__title" id="kontakt-titel">Kontakt</h2>
+        </header>
+        <div class="section__body contact">
+          <p class="contact__lead">
+            Wer sich über KI in der Verwaltung, Digitalisierung oder Retrocomputer austauschen
+            möchte: Ich freue mich über eine Nachricht.
+          </p>
+          <p>
+            <a class="button button--primary js-email" href="#kontakt">E-Mail schreiben</a>
+          </p>
+          <noscript><p>E-Mail: andreas.bock02 [at] gmail.com</p></noscript>
+          <ul class="contact__links" id="profile-links"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© <span class="js-year">2026</span> Andreas Bock</p>
+      <ul class="site-footer__links">
+        <li><a href="impressum.html">Impressum</a></li>
+        <li><a href="datenschutz.html">Datenschutz</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="content/profil.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
