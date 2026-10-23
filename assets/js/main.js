@@ -298,6 +298,86 @@
     measure();
   }
 
+  // Anleitungen: Knopf mit data-kopieren="id" kopiert den Text des Elements mit dieser id.
+  // Die Zwischenablage-Schnittstelle gibt es nicht überall (z. B. alte Browser),
+  // dann wird der Text markiert und mit dem alten Befehl kopiert.
+  function setupKopieren() {
+    document.querySelectorAll("[data-kopieren]").forEach(function (button) {
+      const quelle = document.getElementById(button.dataset.kopieren);
+      if (!quelle) return;
+      const figur = button.closest("figure");
+      const status = figur && figur.querySelector("[role=status]");
+      const beschriftung = button.textContent;
+      let timer;
+
+      function melden(ok) {
+        button.textContent = ok ? "Kopiert" : beschriftung;
+        button.classList.toggle("is-kopiert", ok);
+        if (status) status.textContent = ok
+          ? "Der Auftrag ist in der Zwischenablage."
+          : "Kopieren hat nicht geklappt. Der Text ist markiert und lässt sich mit Strg+C kopieren.";
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          button.textContent = beschriftung;
+          button.classList.remove("is-kopiert");
+          if (status) status.textContent = "";
+        }, ok ? 3000 : 8000);
+      }
+
+      function altesKopieren() {
+        const range = document.createRange();
+        range.selectNodeContents(quelle);
+        const auswahl = window.getSelection();
+        auswahl.removeAllRanges();
+        auswahl.addRange(range);
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        if (ok) auswahl.removeAllRanges();
+        melden(ok);
+      }
+
+      button.addEventListener("click", function () {
+        const text = quelle.textContent.trim();
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(function () { melden(true); }, altesKopieren);
+        } else {
+          altesKopieren();
+        }
+      });
+    });
+  }
+
+  // Anleitungen: Schrittanzeige im Kopf. Abschnitte mit data-schritt="n" (0 = Vorbereitung,
+  // 1 bis 5 = Schritte, 6 = danach); maßgeblich ist der letzte, der die Bildschirmmitte erreicht hat.
+  function setupSchritte() {
+    const abschnitte = Array.from(document.querySelectorAll("[data-schritt]"));
+    const nameEl = document.querySelector("[data-schritt-name]");
+    const balken = Array.from(document.querySelectorAll(".epoche__balken i"));
+    if (!abschnitte.length || !nameEl) return;
+    let ticking = false;
+
+    function update() {
+      ticking = false;
+      const mitte = window.innerHeight * 0.5;
+      let schritt = -1;
+      abschnitte.forEach(function (a) {
+        if (a.getBoundingClientRect().top < mitte) schritt = Number(a.dataset.schritt);
+      });
+      const name = schritt < 0 ? "Überblick"
+        : schritt === 0 ? "Vorbereitung"
+        : schritt > 5 ? "Fertig"
+        : "Schritt " + schritt + " von 5";
+      if (nameEl.textContent !== name) nameEl.textContent = name;
+      balken.forEach(function (b, i) { b.classList.toggle("is-on", i < schritt); });
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
+
   renderTimeline();
   renderSkills();
   renderProjects();
@@ -306,6 +386,8 @@
   setupNav();
   setupTheme();
   setupEpochen();
+  setupKopieren();
+  setupSchritte();
   document.querySelectorAll(".js-year").forEach(function (y) {
     y.textContent = String(new Date().getFullYear());
   });

@@ -1211,3 +1211,178 @@ a.external::after {
   height: 2px;
   background: linear-gradient(90deg, var(--accent) 0 40%, color-mix(in srgb, currentColor 50%, transparent) 40%);
 }
+
+/* ==========================================================================
+   Anleitungen (anleitungen/*.html): eine Seite statt Folien
+   Hintergrund ist die Gegenwart, die KI-Epoche mit dem Raster der Webseiten-Epoche,
+   keine Papierakte. Die Schrittanzeige im Kopf nutzt die Bauteile von .epoche.
+   ========================================================================== */
+
+body.anleitung {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 39px, var(--web-raster) 39px 40px),
+    repeating-linear-gradient(180deg, transparent 0 39px, var(--web-raster) 39px 40px),
+    var(--ki-bg);
+  background-attachment: fixed;
+}
+
+/* Kopf ohne Menü: nur Kürzel, Schrittanzeige und Umschalter */
+.anleitung .nav__theme { flex: none; }
+.anleitung .theme-toggle { width: auto; margin: 0; padding: 0; justify-content: center; }
+.anleitung .theme-toggle__text {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.anleitung__hero { padding: 2.5rem 0 3rem; }
+@media (min-width: 761px) { .anleitung__hero { padding: 4.5rem 0 5rem; } }
+.anleitung .hero__title { font-size: clamp(2.4rem, 8.5vw, 5rem); }
+.anleitung__akzent { color: var(--accent); }
+
+/* Die Design-Datei als Blatt neben dem Titel */
+.design-datei {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: min(100%, 17rem);
+  padding: 1rem 1.15rem 1.25rem;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  font-family: var(--din);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  transform: rotate(-3deg);
+}
+@media (min-width: 761px) { .design-datei { margin-right: 1rem; } }
+.design-datei b { font-weight: 600; padding-bottom: 0.45rem; border-bottom: 1px solid var(--line); }
+.design-datei__zeile { color: var(--muted); }
+.design-datei__farben { display: flex; gap: 0.35rem; }
+.design-datei__farben i { width: 1.4rem; height: 1.4rem; border: 1px solid var(--line-strong); }
+.design-datei__farben i:nth-child(1) { background: var(--accent); }
+.design-datei__farben i:nth-child(2) { background: var(--stempel); }
+.design-datei__farben i:nth-child(3) { background: var(--akte-bg); }
+.design-datei__linien {
+  height: 2.2rem;
+  background: repeating-linear-gradient(180deg, transparent 0 0.45rem, var(--line) 0.45rem calc(0.45rem + 1.5px));
+}
+
+.anleitung .section__body > p { max-width: 40rem; }
+
+.anleitung__liste li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+.anleitung__liste li + li { margin-top: 0.5rem; }
+.anleitung__liste li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.6em;
+  width: 0.6rem; height: 0.6rem;
+  background: var(--accent);
+}
+
+.anleitung__hinweis {
+  margin-top: 1.75rem;
+  font-family: var(--din);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--accent);
+}
+
+.anleitung__kasten { margin-top: 2rem; font-style: normal; }
+.anleitung__kasten p + p { margin-top: 0.75em; }
+
+/* Beispiel-Auftrag: Eingabefeld eines KI-Chats mit Knopf zum Kopieren */
+.auftrag {
+  margin: 1.25rem 0 0;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+}
+.auftrag__kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--din);
+}
+.auftrag__name { font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.auftrag__kopieren {
+  min-height: 2.75rem;
+  padding: 0.3rem 1.1rem;
+  border: 2px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--din);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.auftrag__kopieren:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+.auftrag__kopieren.is-kopiert { background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent); }
+.auftrag__kopieren[hidden] { display: none; }
+.auftrag__text {
+  margin: 0;
+  padding: 1.1rem 1.1rem 1.25rem;
+  line-height: 1.65;
+}
+.auftrag__text::after {               /* Schreibmarke am Ende der Eingabe */
+  content: "";
+  display: inline-block;
+  width: 0.45rem; height: 1.05em;
+  margin-left: 0.2rem;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: cursor 1.1s steps(1) infinite;
+}
+.auftrag__status:empty { display: none; }
+.auftrag__status {
+  margin: 0;
+  padding: 0 1.1rem 0.9rem;
+  font-family: var(--din);
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+
+/* Schritt 5 ist der wichtigste: eigener Rahmen in Grünstift und ein Stempel */
+.anleitung__stempel { display: inline-block; margin: 0.9rem 0 0 0.2rem; }
+.anleitung__rahmen {
+  padding: 1.25rem 1.25rem 1.4rem;
+  background: var(--surface);
+  border: 3px solid var(--accent);
+  font-size: 1.1rem;
+}
+@media (min-width: 640px) { .anleitung__rahmen { padding: 1.75rem 1.75rem 1.9rem; } }
+.anleitung__wichtig .section__nr { font-weight: 700; }
+
+.anleitung__schluss { padding-bottom: 4.5rem; }
+.anleitung__schluss .container { max-width: 52rem; }
+.anleitung__schluss-titel {
+  margin-bottom: 1.5rem;
+  font-size: clamp(2.4rem, 8vw, 4.5rem);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: -0.02em;
+}
+.anleitung__frage {
+  font-family: var(--din);
+  font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--accent);
+  text-wrap: balance;
+}
+.anleitung__autor {
+  margin-top: 2.5rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent);
+  font-family: var(--din);
+  color: var(--muted);
+}
+.anleitung__autor b { color: var(--text); font-weight: 600; }

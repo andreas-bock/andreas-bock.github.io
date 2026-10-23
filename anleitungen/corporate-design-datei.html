@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Corporate Design für die KI | Andreas Bock</title>
+  <meta name="description" content="Kurzanleitung: In fünf Schritten das Corporate Design einer Verwaltung mit KI in eine Design-Datei packen, die man der KI bei jeder Aufgabe mitgibt. Mit Beispiel-Auftrag zum Kopieren.">
+  <meta name="author" content="Andreas Bock">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#e9e7f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16141f" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://andreas-bock.github.io/anleitungen/corporate-design-datei.html">
+
+  <!-- Vorschau beim Teilen (LinkedIn, Messenger, Mastodon & Co.) -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://andreas-bock.github.io/anleitungen/corporate-design-datei.html">
+  <meta property="og:site_name" content="Andreas Bock">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="Corporate Design für die KI. In fünf Schritten zur eigenen Design-Datei.">
+  <meta property="og:description" content="Eine Kurzanleitung für Verwaltungen, mit Beispiel-Auftrag zum Kopieren.">
+  <meta property="og:image" content="https://andreas-bock.github.io/assets/img/vorschau.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="Startseite: Überschrift „Verwaltungs-IT trifft KI.“ und ein Porträt von Andreas Bock">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script>
+    // Früh auswerten, damit nichts im falschen Design aufblitzt: ?design=hell|dunkel
+    // kommt vom Umschalter auf der Startseite und wird über interne Links weitergereicht.
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js");
+      var m = /[?&]design=(hell|dunkel)(?:&|$)/.exec(location.search);
+      if (m) root.dataset.theme = m[1] === "dunkel" ? "dark" : "light";
+    })();
+  </script>
+</head>
+<body class="anleitung">
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header class="site-header">
+    <div class="nav container">
+      <a class="nav__brand" href="../index.html" aria-label="Andreas Bock, zur Startseite">AB</a>
+      <!-- Schrittanzeige wie bei einem Online-Antrag, folgt beim Scrollen (setupSchritte) -->
+      <p class="epoche" aria-hidden="true">
+        <span class="epoche__label">Kurzanleitung</span>
+        <span class="epoche__name" data-schritt-name>Überblick</span>
+        <span class="epoche__balken"><i></i><i></i><i></i><i></i><i></i></span>
+      </p>
+      <!-- Umschalter hell/dunkel, braucht JavaScript und wird sonst ausgeblendet -->
+      <div class="nav__theme">
+        <button class="theme-toggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__text">Dunkles Design</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero anleitung__hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="aktenschild">
+            <span class="aktenschild__feld">Kurzanleitung</span>
+            <span class="aktenschild__feld">Andreas Bock</span>
+            <span class="aktenschild__feld">KI in der Verwaltung</span>
+          </p>
+          <h1 class="hero__title">Corporate Design für die KI. <span class="anleitung__akzent">In fünf Schritten zur eigenen Design-Datei.</span></h1>
+          <p class="hero__lead">Eine Anleitung für Verwaltungen.<br>Klappt aber auch überall sonst.</p>
+        </div>
+        <!-- Die Design-Datei, um die es geht: Farben, Schrift, Abstände, Logo -->
+        <div class="design-datei" aria-hidden="true">
+          <b>corporate-design.md</b>
+          <span class="design-datei__zeile"># Farben</span>
+          <span class="design-datei__farben"><i></i><i></i><i></i></span>
+          <span class="design-datei__zeile"># Schrift, Abstände, Logo</span>
+          <span class="design-datei__linien"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vorbereitung" data-schritt="0" aria-labelledby="vorbereitung-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <h2 class="section__title" id="vorbereitung-titel">Was ihr braucht</h2>
+        </header>
+        <div class="section__body">
+          <p class="section__intro">Idealerweise:</p>
+          <ul class="anleitung__liste">
+            <li>das Logo als Vektordatei, zum Beispiel EPS oder AI</li>
+            <li>Vorgaben zum Corporate Design, falls es welche gibt</li>
+            <li>euren Briefkopf</li>
+            <li>eure Webseite</li>
+            <li>einen KI-Chat</li>
+          </ul>
+          <p class="anleitung__hinweis">Technische Kenntnisse braucht ihr nicht.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="schritt-1" data-schritt="1" aria-labelledby="schritt-1-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">1</p>
+          <h2 class="section__title" id="schritt-1-titel"><span class="visually-hidden">Schritt 1: </span>Nachfragen</h2>
+        </header>
+        <div class="section__body">
+          <p>Gibt es schon Vorgaben? Fragt bei der Pressestelle oder beim Stadtmarketing.</p>
+          <p>Oder bei den Agenturen, die schon für euch gearbeitet haben: für die Webseite, für Flyer, Broschüren oder andere Medien.</p>
+          <p>Oft liegt irgendwo ein PDF mit Farben, Schriften und Regeln fürs Logo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="schritt-2" data-schritt="2" aria-labelledby="schritt-2-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">2</p>
+          <h2 class="section__title" id="schritt-2-titel"><span class="visually-hidden">Schritt 2: </span>Keine Vorgaben? <span class="anleitung__akzent">Kein Problem.</span></h2>
+        </header>
+        <div class="section__body">
+          <p>Dann nehmt euren Briefkopf mit Logo und eure Webseite. Daraus kann die KI das Design ableiten.</p>
+          <aside class="card__story anleitung__kasten">
+            <p class="card__story-label">Notlösung fürs Logo</p>
+            <p>Kein Logo als Vektordatei zu finden? Dann kann die KI aus einer Pixelversion (PNG, JPG) eine Vektorgrafik nachbauen. Ganz genau wird das aber nicht. Prüft das Ergebnis gründlich und klärt mit Pressestelle oder Stadtmarketing, ob ihr es so verwenden dürft.</p>
+            <p>Besser: weitersuchen. Irgendwer hat das Logo ja einmal gestaltet.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="schritt-3" data-schritt="3" aria-labelledby="schritt-3-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">3</p>
+          <h2 class="section__title" id="schritt-3-titel"><span class="visually-hidden">Schritt 3: </span>Die KI recherchieren lassen</h2>
+        </header>
+        <div class="section__body">
+          <p>Lasst die KI im Netz suchen, ob es öffentliche Beiträge über das Design eurer Verwaltung gibt, zum Beispiel zu einem neuen Webauftritt.</p>
+          <p>Bei mir hat sie so zwei Artikel mit Details gefunden, die im PDF gar nicht standen.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="schritt-4" data-schritt="4" aria-labelledby="schritt-4-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">4</p>
+          <h2 class="section__title" id="schritt-4-titel"><span class="visually-hidden">Schritt 4: </span>Alles in den Chat</h2>
+        </header>
+        <div class="section__body">
+          <p>Alle Unterlagen in den KI-Chat, dazu ein Auftrag. Zum Beispiel:</p>
+          <!-- Der Auftrag als Eingabefeld eines KI-Chats, mit Knopf zum Übernehmen (setupKopieren) -->
+          <figure class="auftrag">
+            <figcaption class="auftrag__kopf">
+              <span class="auftrag__name">Beispiel-Auftrag</span>
+              <button class="auftrag__kopieren" type="button" data-kopieren="auftrag-text">Kopieren</button>
+            </figcaption>
+            <p class="auftrag__text" id="auftrag-text">Erstelle aus den angehängten Unterlagen eine Markdown-Datei mit unserem Corporate Design: Farben mit Farbwerten, Schriften, Größen, Abstände und Regeln für das Logo. Nimm das Logo als Vektorgrafik in Textform mit auf. Recherchiere zusätzlich, ob es öffentliche Informationen zu unserem Design gibt. Gib zu jeder Angabe an, aus welcher Unterlage oder Quelle sie stammt. Ich will die Datei später einer KI mitgeben, damit sie Webseiten und Dokumente in unserem Design erstellt.</p>
+            <p class="auftrag__status" role="status" aria-live="polite"></p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section anleitung__wichtig" id="schritt-5" data-schritt="5" aria-labelledby="schritt-5-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <p class="section__nr" aria-hidden="true">5</p>
+          <h2 class="section__title" id="schritt-5-titel"><span class="visually-hidden">Schritt 5: </span>Prüfen</h2>
+          <p class="badge anleitung__stempel">Der wichtigste Schritt</p>
+        </header>
+        <div class="section__body">
+          <div class="anleitung__rahmen">
+            <p>Lest die Datei komplett durch, auch wenn sie etwas länger ist.</p>
+            <p>Ihr müsst nicht jeden Farbcode nachrechnen. Aber achtet auf Angaben, die nicht in euren Unterlagen standen. Woher kommen die?</p>
+            <p>Deshalb lasst ihr euch die Quellen am besten gleich im Auftrag mitgeben. Im <a href="#schritt-4">Beispiel-Auftrag aus Schritt 4</a> steht das schon drin.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="und-dann" data-schritt="6" aria-labelledby="und-dann-titel">
+      <div class="container section__grid">
+        <header class="section__head">
+          <h2 class="section__title" id="und-dann-titel">Und dann?</h2>
+        </header>
+        <div class="section__body">
+          <p>Die Datei gebt ihr der KI ab jetzt bei jeder Aufgabe mit: Webseite, PDF, Präsentation.</p>
+          <p>Ihr müsst das Design nie wieder neu beschreiben.</p>
+          <p class="anleitung__hinweis">Behandelt sie wie eure Druckvorlagen: intern ablegen, nicht öffentlich teilen.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section anleitung__schluss" aria-labelledby="schluss-titel">
+      <div class="container">
+        <h2 class="anleitung__schluss-titel" id="schluss-titel">Kein Hexenwerk.</h2>
+        <p>Mit KI zu arbeiten ist weniger Technik als Strategie:</p>
+        <p class="anleitung__frage">Was gebe ich ihr, und was soll am Ende herauskommen?</p>
+        <p class="anleitung__autor"><b>Andreas Bock</b>, KI in der Verwaltung. <a href="../index.html">Mehr über mich</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© <span class="js-year">2026</span> Andreas Bock</p>
+      <ul class="site-footer__links">
+        <li><a href="../index.html">Startseite</a></li>
+        <li><a href="../impressum.html">Impressum</a></li>
+        <li><a href="../datenschutz.html">Datenschutz</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
